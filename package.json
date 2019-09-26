@@ -4,11 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "node -r esm app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Huat",
   "license": "ISC",
   "dependencies": {
+    "esm": "^3.2.25",
     "express": "^4.17.1"
   }
 }

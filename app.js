@@ -1,4 +1,4 @@
-const Express = require('express');
+import Express from 'express';
 const app = Express();
 // todo :: take it from .env
 const port = 9000; 
