@@ -1,5 +1,6 @@
 import Express from 'express';
 import { rootRouter } from './routes/api';
+import { dbConn } from './modules/dbConn';
 
 const app = Express();
 // todo :: take it from .env
