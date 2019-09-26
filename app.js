@@ -1,9 +1,11 @@
 import Express from 'express';
+import { rootRouter } from './routes/api';
+
 const app = Express();
 // todo :: take it from .env
 const port = 9000; 
 
-
+app.use('/api', rootRouter);
 
 app.use(function (req, res, next) {
   res.status(404).json({message: "Path not exist."});
