@@ -1,6 +1,14 @@
-export const handleOutput = async (res, dbFunction, params, successStatusCode) => {
+export const handleOutput = async (res, dbFunction, params, successStatusCode, validations) => {
   try {
-    let output = await dbFunction.call(this, params);
+    if (!validations) {
+      res.status(400).json({message: "Invalid input. Please check if the input is correct."});
+      return;
+    }
+    let output = {message: "Something is wrong"};
+    if (dbFunction) {
+      output = await dbFunction.call(this, ...params);
+    }
+
     res.status(successStatusCode).json(output);
   } catch (err) {
     const errorTime = Date.now();

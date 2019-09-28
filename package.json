@@ -13,6 +13,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "mysql2": "^1.7.0",
-    "sequelize": "^5.19.0"
+    "sequelize": "^5.19.0",
+    "validator": "^11.1.0"
   }
 }
