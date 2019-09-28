@@ -24,7 +24,11 @@ rootRouter.get('/commonstudents', (req, res) => {
 });
 
 rootRouter.post('/suspend', (req, res) => {
-  res.json({message: "r3 reached"});
+  const studentEmail = req.body.student;
+
+  const validations = isEmail(studentEmail);
+
+  handleOutput(res, dbStudent.suspendStudent, [studentEmail], 204, validations, [sanitizeEmails]);
 });
 
 rootRouter.post('/retrievefornotifications', (req, res) => {

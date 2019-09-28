@@ -43,7 +43,21 @@ async function getStudentByTeacher (teacherEmails) {
   };
 }
 
+async function suspendStudent (studentEmail) {
+  let updated = await Student.update({
+    suspended: true
+  }, {
+    where: {
+      email: studentEmail
+    }
+  });
+  if (!updated[0]) {
+    return Promise.reject(new Error("Update failed. It is likely because either student email does not exist or you have sent more than one same request within a short moment."));
+  }
+}
+
 
 dbStudentFunc.prototype = Object.assign(dbStudentFunc.prototype, {
   getStudentByTeacher,
+  suspendStudent,
 });
