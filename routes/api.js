@@ -1,7 +1,7 @@
 import Express from 'express';
 import { isEmail, isEmailArray } from '../modules/customValidators';
 import { handleOutput } from '../modules/apiOutputHandler';
-import { sanitizeEmails } from '../modules/sanitizers';
+import { sanitizeEmails, sanitizeString } from '../modules/sanitizers';
 import dbTeacher from '../db_modules/dbTeacher';
 import dbStudent from '../db_modules/dbStudent';
 const rootRouter = Express.Router();
@@ -32,7 +32,12 @@ rootRouter.post('/suspend', (req, res) => {
 });
 
 rootRouter.post('/retrievefornotifications', (req, res) => {
-  res.json({message: "r4 reached"});
+  const teacherEmail = req.body.teacher;
+  const notification = req.body.notification || "";
+
+  const validations = isEmail(teacherEmail) && typeof notification === 'string';
+
+  handleOutput(res, dbStudent.retrieveNotification, [teacherEmail, notification], 200, validations, [sanitizeEmails, sanitizeString]);
 });
 
 export {rootRouter};

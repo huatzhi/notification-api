@@ -1,4 +1,4 @@
-import { normalizeEmail } from 'validator';
+import { normalizeEmail, trim } from 'validator';
 
 export const sanitizeEmails = (input) => {
   if (Array.isArray(input)) {
@@ -8,4 +8,8 @@ export const sanitizeEmails = (input) => {
     return input;
   }
   return normalizeEmail(input);
+}
+
+export const sanitizeString = (input) => {
+  return trim(input);
 }

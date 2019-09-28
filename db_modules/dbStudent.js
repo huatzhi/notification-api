@@ -3,18 +3,17 @@ export default new dbStudentFunc;
 
 import { Op } from 'sequelize';
 import { Student, Teacher } from "../schema";
-import { isArray } from "util";
+import { getAliasEmailsFromString } from "../modules/getAliasEmailsFromString";
 
 
 async function getStudentByTeacher (teacherEmails) {
-  const emailQuery = isArray(teacherEmails) ?  { [Op.in]: teacherEmails } : teacherEmails;
+  const emailQuery = Array.isArray(teacherEmails) ?  { [Op.in]: teacherEmails } : teacherEmails;
   
   const teachers = await Teacher.findAll({
     attributes: ['id'],
     where: {
       email: emailQuery
-    }
-  }, {
+    },
     raw: true
   });
 
@@ -26,7 +25,7 @@ async function getStudentByTeacher (teacherEmails) {
     }
   }
   
-  let students = await Student.findAll({
+  const students = await Student.findAll({
     attributes: ["email"],
     include:[{
       model: Teacher,
@@ -35,7 +34,8 @@ async function getStudentByTeacher (teacherEmails) {
           [Op.in]: teacherIds
         }
       }
-    }]
+    }],
+    raw: true
   });
 
   return {
@@ -44,7 +44,7 @@ async function getStudentByTeacher (teacherEmails) {
 }
 
 async function suspendStudent (studentEmail) {
-  let updated = await Student.update({
+  const updated = await Student.update({
     suspended: true
   }, {
     where: {
@@ -56,8 +56,54 @@ async function suspendStudent (studentEmail) {
   }
 }
 
+async function retrieveNotification(teacherEmail, notification) {
+  let notificationEmails = getAliasEmailsFromString(notification);
+
+  const studentUnderTeacherProm = Student.findAll({
+    attributes: ["email"],
+    where: {
+      suspended: false
+    },
+    include: [{
+      model: Teacher,
+      where: {
+        email: teacherEmail
+      }
+    }],
+    raw: true
+  }).catch(err => {
+    return [];
+  });
+
+  const suspendedNotificationStudentProm = Student.findAll({
+    attributes: ["email"],
+    where: {
+      email: {
+        [Op.in]: notificationEmails,
+      },
+      suspended: true
+    },
+    raw: true
+  }).catch(err => {
+    return [];
+  });
+
+  const [studentUnderTeacher, suspendedNotificationStudent] = await Promise.all([studentUnderTeacherProm, suspendedNotificationStudentProm]);
+
+  const studentUnderTeacherEmails = studentUnderTeacher.map( student => student.email );
+
+  for (let i = 0; i < suspendedNotificationStudent.length; i++) {
+    const indexToDelete = notificationEmails.indexOf(suspendedNotificationStudent[i].email);
+    notificationEmails.splice(indexToDelete, 1);
+  }
+
+  const recipients = [...new Set([].concat(studentUnderTeacherEmails, notificationEmails))];
+
+  return { recipients };
+}
 
 dbStudentFunc.prototype = Object.assign(dbStudentFunc.prototype, {
   getStudentByTeacher,
   suspendStudent,
+  retrieveNotification,
 });
