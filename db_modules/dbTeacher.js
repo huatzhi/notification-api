@@ -13,6 +13,7 @@ async function registerStudent(teacherEmail, studentEmails) {
   for (let i = 0; i < studentEmails.length; i++) {
     let studentEmail = studentEmails[i];
     let prom = Student.findOrCreate({
+      attributes: ['id'],
       where: {
         email: studentEmail
       }, 
