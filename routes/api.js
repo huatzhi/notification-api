@@ -1,4 +1,5 @@
 import Express from 'express';
+import { handleOutput } from '../modules/apiOutputHandler';
 const rootRouter = Express.Router();
 
 rootRouter.post('/register', async (req, res) => {
