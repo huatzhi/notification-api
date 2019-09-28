@@ -47,5 +47,3 @@ async function getStudentByTeacher (teacherEmails) {
 dbStudentFunc.prototype = Object.assign(dbStudentFunc.prototype, {
   getStudentByTeacher,
 });
-
-// todo :: email sanitize  (cap and space)
