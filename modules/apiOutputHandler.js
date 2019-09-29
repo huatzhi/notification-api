@@ -5,10 +5,10 @@ export const handleOutput = async (res, dbFunction, params, successStatusCode, v
       return;
     } 
     let output = {message: "Something is wrong"};
-    if (dbFunction) {
+    if (typeof dbFunction === "function") {
       if (sanitizers && sanitizers.length) {
         for (let i = 0; i < params.length; i++) {
-          if (typeof sanitizers[i] == "function") {
+          if (typeof sanitizers[i] === "function") {
             params[i] = sanitizers[i](params[i]);
           }
         }

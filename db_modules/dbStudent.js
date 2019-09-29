@@ -39,7 +39,7 @@ async function getStudentByTeacher (teacherEmails) {
   });
 
   return {
-    students: students.map(student => student.email)
+    students: [...new Set(students.map(student => student.email))]
   };
 }
 
