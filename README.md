@@ -61,3 +61,4 @@ Considering submit PR to fix the issue in the future.
 
 ### Publicly hosted api
 <http://149.28.156.166/>
+(Remember to add `/api/` at the back of the link)
