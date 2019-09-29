@@ -1,0 +1,5 @@
+{
+  "name": "notification-api",
+  "script": "./app.js",
+  "node_args": "-r esm"
+}
