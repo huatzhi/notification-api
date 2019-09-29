@@ -21,7 +21,6 @@ export const handleOutput = async (res, dbFunction, params, successStatusCode, v
   } catch (err) {
     const errorTime = new Date(Date.now());
     const defaultErrorMessage = "Please contact system admin regarding to this error: " + errorTime;
-    console.error(err);
     res.status(err && err.code || 400).json({
       message: err && err.message || defaultErrorMessage
     });
