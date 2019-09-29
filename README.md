@@ -27,7 +27,7 @@ Then, you will need to move into the folder and install the necessary node modul
 cd notification-api
 npm i
 ```
-Then, you will need to change .env file to suit your environment setting.
+Then, you will need to change `.env` file to suit your environment setting.
 ```
 DB_HOST=localhost            # where you host your mysql
 DB_PORT=3306                 # the port your mysql is hosted
