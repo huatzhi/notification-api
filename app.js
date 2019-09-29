@@ -1,10 +1,11 @@
+import { config as envConfig } from 'dotenv';
+envConfig();
+
 import express from 'express';
 import { rootRouter } from './routes/api';
-import { dbConn } from './modules/dbConn';
 
 const app = express();
-// todo :: take it from .env
-const port = 9000; 
+const port = process.env.API_PORT || 9000; 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

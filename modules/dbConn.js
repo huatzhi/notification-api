@@ -1,13 +1,15 @@
+import { config as envConfig } from 'dotenv';
+envConfig();
+
 import Sequelize from 'sequelize';
 
-// todo :: change to use env file
 export const dbConn = new Sequelize(
-  "notification_api", // database name 
-  "root", // database user
-  "abc123", // database pw
+  process.env.DB_NAME || "notification_api", // database name 
+  process.env.DB_USER || "root", // database user
+  process.env.DB_PASS || "root", // database pw
   {
-    host: "localhost",
-    port: "3306",
+    host: process.env.DB_HOST || "localhost",
+    port: process.env.DB_PORT || "3306",
     dialect: "mysql"
   }
 )
