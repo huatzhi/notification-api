@@ -27,7 +27,7 @@ Then, you will need to move into the folder and install the necessary node modul
 cd notification-api
 npm i
 ```
-Then, you will need to change .env file to suit your environment setting.
+Then, you will need to change `.env` file to suit your environment setting.
 ```
 DB_HOST=localhost            # where you host your mysql
 DB_PORT=3306                 # the port your mysql is hosted
@@ -55,7 +55,10 @@ pm2 start pm2.json
 Any specification that does not specify in the requirement are resolve with YAGNI approach, meaning in order to not waste too much time thinking how I am going to design it (but I still did it for at least 60% of the time anyway), I'll just leave how the logic originally going to turn out unless it make no sense.
 
 ### mysql 8.0+ issue
-
 Sequelize ORM is depend on node-mysql2, which currently does not support the new auth method.
 Solution: <https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server>
 Considering submit PR to fix the issue in the future.
+
+### Publicly hosted api
+<http://149.28.156.166/>
+(Remember to add `/api/` at the back of the link)
