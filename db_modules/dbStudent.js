@@ -17,6 +17,11 @@ async function getCommonStudentByTeacher (teacherEmails) {
     raw: true
   });
 
+  if (Array.isArray(teacherEmails) && teacherEmails.length !== teachers.length) {
+    return {
+      students: []
+    };
+  }
 
   const teacherIds = [];
   for (let i = 0; i < teachers.length; i++) {
@@ -26,7 +31,7 @@ async function getCommonStudentByTeacher (teacherEmails) {
   }
 
   let relevantStudentIds;
-  let commonStudentEmails;
+  let commonStudentEmails = [];
 
   for (let i = 0; i < teacherIds.length; i++) {
     let isLast = i === (teacherIds.length - 1);
