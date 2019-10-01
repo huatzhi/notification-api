@@ -22,28 +22,23 @@ describe("dbStudent", () => {
     teachers[1].addStudents([students[2], students[4], students[5], students[6]]);
     teachers[2] = await Teacher.create({ email: faker.internet.email().toLowerCase() });
   });
-  describe("getStudentByTeacher", () => {
+  describe("getCommonStudentByTeacher", () => {
     it("should get students when provided a teacher", async () => {
-      let result = await dbStudent.getStudentByTeacher(teachers[0].email);
+      let result = await dbStudent.getCommonStudentByTeacher(teachers[0].email);
       result.students.should.containDeep([students[0].email, students[1].email, students[2].email]);
       result.students.length.should.equal(3);
     });
 
-    it("should get all student without duplicate when provided more than 1 teacher", async () => {
-      let result = await dbStudent.getStudentByTeacher([teachers[0].email, teachers[1].email]);
+    it("should contain only student shared by both teacher", async () => {
+      let result = await dbStudent.getCommonStudentByTeacher([teachers[0].email, teachers[1].email]);
       result.students.should.containDeep([
-        students[0].email,
-        students[1].email,
         students[2].email,
-        students[4].email,
-        students[5].email,
-        students[6].email,
       ]);
-      result.students.length.should.equal(6);
+      result.students.length.should.equal(1);
     });
 
     it("should get no students when teacher do not have them", async () => {
-      let result = await dbStudent.getStudentByTeacher([teachers[2].email, faker.internet.email().toLowerCase()]);
+      let result = await dbStudent.getCommonStudentByTeacher([teachers[2].email, faker.internet.email().toLowerCase()]);
       result.students.length.should.equal(0);
     });
   });
