@@ -20,7 +20,7 @@ rootRouter.get('/commonstudents', (req, res) => {
 
   const validations = isEmail(teacherEmail) || isEmailArray(teacherEmail);
 
-  handleOutput(res, dbStudent.getStudentByTeacher, [teacherEmail], 200, validations, [sanitizeEmails]);
+  handleOutput(res, dbStudent.getCommonStudentByTeacher, [teacherEmail], 200, validations, [sanitizeEmails]);
 });
 
 rootRouter.post('/suspend', (req, res) => {

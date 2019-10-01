@@ -6,7 +6,7 @@ import { Student, Teacher } from "../schema";
 import { getAliasEmailsFromString } from "../modules/getAliasEmailsFromString";
 
 
-async function getStudentByTeacher (teacherEmails) {
+async function getCommonStudentByTeacher (teacherEmails) {
   const emailQuery = Array.isArray(teacherEmails) ?  { [Op.in]: teacherEmails } : teacherEmails;
   
   const teachers = await Teacher.findAll({
@@ -24,23 +24,46 @@ async function getStudentByTeacher (teacherEmails) {
       teacherIds.push(teachers[i].id);
     }
   }
-  
-  const students = await Student.findAll({
-    attributes: ["email"],
-    include:[{
-      model: Teacher,
-      where: {
-        id: {
-          [Op.in]: teacherIds
-        }
-      }
-    }],
-    raw: true
-  });
 
-  return {
-    students: [...new Set(students.map(student => student.email))]
-  };
+  let relevantStudentIds;
+  let commonStudentEmails;
+
+  for (let i = 0; i < teacherIds.length; i++) {
+    let isLast = i === (teacherIds.length - 1);
+    let attributes = isLast ? ["email"] : ["id"];
+
+    let findAllQuery = {
+      attributes,
+      include: [{
+        model: Teacher,
+        where: {
+          id: teacherIds[i]
+        }
+      }],
+      raw: true
+    };
+
+    if (relevantStudentIds && relevantStudentIds.length) {
+      findAllQuery.where = {
+        id: {
+          [Op.in]: relevantStudentIds
+        }
+      };
+    }
+
+    let students = await Student.findAll(findAllQuery);
+
+    if (!students || students.length === 0) {
+      commonStudentEmails = [];
+      break;
+    } else if (isLast) {
+      commonStudentEmails = students.map(student => student.email);
+    } else {
+      relevantStudentIds = students.map(student => student.id);
+    }
+  }
+
+  return { students: commonStudentEmails };
 }
 
 async function suspendStudent (studentEmail) {
@@ -103,7 +126,7 @@ async function retrieveNotification(teacherEmail, notification) {
 }
 
 dbStudentFunc.prototype = Object.assign(dbStudentFunc.prototype, {
-  getStudentByTeacher,
+  getCommonStudentByTeacher,
   suspendStudent,
   retrieveNotification,
 });
